@@ -4,10 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Nik Sizov <wwwwwwwww@list.ru>"]
 readme = "README.md"
-packages = [{include = "hexlet_code"}]
+packages = [{include = "hexlet-code"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+
+[tool.poetry.scripts]
+gendiff = "hexlet-code:main"
 
 
 [build-system]
