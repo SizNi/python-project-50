@@ -38,6 +38,7 @@ def dict_transform(summ_dict):  # сортирует и трансформиру
     summ_str = summ_str[:1] +'\n' + summ_str[1:-1] + '\n' + summ_str[-1:]
     return(summ_str)
 
+
 def sort_key(e):  # функция сортировки по алфавиту без учета минусов и плюсов
     word = e[0]
     return word[1]
