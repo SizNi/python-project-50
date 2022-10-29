@@ -47,8 +47,3 @@ def generate_diff(first_file, second_file):  # функция, вызывающ�
     if __name__ == 'gendiff':
         return main(first_file, second_file)
 
-
-#first_file = 'python-project-50/file1.json'
-#second_file = 'python-project-50/file2.json'
-#generate_diff(first_file, second_file)
-
