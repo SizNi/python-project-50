@@ -35,7 +35,7 @@ def generate_diff(first_file, second_file):
         if type(summ_dict[elem]) == bool:
             summ_dict[elem] = str(summ_dict[elem]).lower()
     result = dict_transform(summ_dict)
-    #print(result)
+    # print(result)
     return result
 
 # проверяет файлы на пустоту
@@ -61,7 +61,7 @@ def dict_transform(summ_dict):
     summ_str = summ_str.replace(' +', '  + ')
     summ_str = summ_str.replace('     ', '    ')
     summ_str = summ_str[:1] + '\n' + summ_str[1:-1] + '\n' + summ_str[-1:]
-    #print(summ_str)
+    # print(summ_str)
     return (summ_str)
 
 # функция сортировки по алфавиту без учета минусов и плюсов
