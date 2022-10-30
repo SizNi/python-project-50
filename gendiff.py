@@ -1,6 +1,6 @@
 import json
 import os
-#from pathlib import Path
+# from pathlib import Path
 
 
 def generate_diff(first_file, second_file):
@@ -71,6 +71,7 @@ def sort_key(e):
     word = e[0]
     return word[1]
 
-#current_dir = Path(__file__).parent
-#print(current_dir)
-#generate_diff(current_dir / 'tests' / 'fixtures' / 'file1.json', current_dir / 'tests' / 'fixtures' / 'file2.json')
+# current_dir = Path(__file__).parent
+# print(current_dir)
+# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1.json',
+# current_dir / 'tests' / 'fixtures' / 'file2.json')
