@@ -10,7 +10,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - name: Poetry install
+      - name: Poetry install  # установить поетри и зависимости ниже (поискать готовый файл)
         run: make install
 
 

@@ -1,7 +1,7 @@
 import json
 
 
-def main(first_file, second_file):
+def generate_diff(first_file, second_file):
     summ_dict = {}
     f1 = json.load(open(first_file))
     f2 = json.load(open(second_file))
@@ -51,10 +51,4 @@ def dict_transform(summ_dict):
 def sort_key(e):  # функция сортировки по алфавиту без учета минусов и плюсов
     word = e[0]
     return word[1]
-
-# функция, вызывающая main, чтоб при импорте модуля это все не сработало
-
-
-def generate_diff(first_file, second_file):
-    if __name__ == 'gendiff':
-        return main(first_file, second_file)
+    

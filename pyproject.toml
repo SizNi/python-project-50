@@ -10,7 +10,7 @@ packages = [{include = "hexlet_code"}]
 python = "^3.8"
 
 [tool.poetry.scripts]
-gendiff = "hexlet-code:main"
+gendiff = "hexlet_code:main"
 
 
 [tool.poetry.group.dev.dependencies]
