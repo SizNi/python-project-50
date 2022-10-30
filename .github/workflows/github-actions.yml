@@ -5,8 +5,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Check out repository code  # смотрю код репозитория
         uses: actions/checkout@v3
+      - name: Python install  # установка пйтина
+        uses: actions/setup-python@v3
+        with: 
+          python-version: "3.10"
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
