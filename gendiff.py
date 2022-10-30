@@ -1,5 +1,6 @@
 import json
 import os
+#from pathlib import Path
 
 
 def generate_diff(first_file, second_file):
@@ -34,7 +35,7 @@ def generate_diff(first_file, second_file):
         if type(summ_dict[elem]) == bool:
             summ_dict[elem] = str(summ_dict[elem]).lower()
     result = dict_transform(summ_dict)
-    print(result)
+    #print(result)
     return result
 
 # проверяет файлы на пустоту
@@ -53,12 +54,14 @@ def dict_transform(summ_dict):
     summ_dict = dict(summ_list)
     summ_str = str(summ_dict)
     summ_str = summ_str.replace(',', '\n')
-    summ_str = summ_str.replace(' ', '')
+    summ_str = summ_str.replace('%', '    ')
     summ_str = summ_str.replace("'", '')
     summ_str = summ_str.replace('-', '  - ')
-    summ_str = summ_str.replace('+', '  + ')
-    summ_str = summ_str.replace('%', '    ')
+    summ_str = summ_str.replace('   -', '  -')
+    summ_str = summ_str.replace(' +', '  + ')
+    summ_str = summ_str.replace('     ', '    ')
     summ_str = summ_str[:1] + '\n' + summ_str[1:-1] + '\n' + summ_str[-1:]
+    #print(summ_str)
     return (summ_str)
 
 # функция сортировки по алфавиту без учета минусов и плюсов
@@ -68,7 +71,6 @@ def sort_key(e):
     word = e[0]
     return word[1]
 
-# current_dir = Path(__file__).parent
-# print(current_dir)
-# generate_diff(current_dir / 'tests' / 'fixtures' / 'empty_file.json',
-# current_dir / 'tests' / 'fixtures' / 'file2.json')
+#current_dir = Path(__file__).parent
+#print(current_dir)
+#generate_diff(current_dir / 'tests' / 'fixtures' / 'file1.json', current_dir / 'tests' / 'fixtures' / 'file2.json')
