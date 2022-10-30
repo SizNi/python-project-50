@@ -1,7 +1,12 @@
 import json
+import os
 
 
 def generate_diff(first_file, second_file):
+    first_size = zero_check(first_file)
+    second_size = zero_check(second_file)
+    if first_size == 0 or second_size == 0:
+        return 'nothing to diff'
     summ_dict = {}
     f1 = json.load(open(first_file))
     f2 = json.load(open(second_file))
@@ -29,6 +34,15 @@ def generate_diff(first_file, second_file):
         if type(summ_dict[elem]) == bool:
             summ_dict[elem] = str(summ_dict[elem]).lower()
     result = dict_transform(summ_dict)
+    print(result)
+    return result
+
+# проверяет файлы на пустоту
+
+
+def zero_check(file):
+    res_1 = os.stat(file)
+    result = res_1.st_size
     return result
 
 # сортирует и трансформирует словарь в нужный вид
@@ -47,8 +61,14 @@ def dict_transform(summ_dict):
     summ_str = summ_str[:1] + '\n' + summ_str[1:-1] + '\n' + summ_str[-1:]
     return (summ_str)
 
+# функция сортировки по алфавиту без учета минусов и плюсов
 
-def sort_key(e):  # функция сортировки по алфавиту без учета минусов и плюсов
+
+def sort_key(e):
     word = e[0]
     return word[1]
-    
+
+# current_dir = Path(__file__).parent
+# print(current_dir)
+# generate_diff(current_dir / 'tests' / 'fixtures' / 'empty_file.json',
+# current_dir / 'tests' / 'fixtures' / 'file2.json')
