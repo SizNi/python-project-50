@@ -15,6 +15,7 @@ gendiff = "hexlet_code:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
+flake8 = "^5.0.4"
 
 [build-system]
 requires = ["poetry-core"]
