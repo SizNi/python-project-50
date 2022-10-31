@@ -8,6 +8,7 @@ packages = [{include = "hexlet_code"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pyyaml = "^6.0"
 
 [tool.poetry.scripts]
 gendiff = "hexlet_code:main"

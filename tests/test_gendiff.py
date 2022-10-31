@@ -22,6 +22,27 @@ def test_empty_gendiff():  # тест на возврат в случае пус
         )
     assert result == 'nothing to diff'
 
+# проверка yml модуля
+
+
+def test_value_gendiff_yml():  # получение положительного результата
+    result = generate_diff(
+        current_dir / 'fixtures' / 'filepath1.yml',
+        current_dir / 'fixtures' / 'filepath2.yaml'
+        )
+    file = current_dir / 'fixtures' / 'result_test_gendiff.txt'
+    with file.open() as f:
+        expected_result = f.read()
+    assert result == expected_result
+
+
+def test_empty_gendiff_yml():  # тест на возврат в случае пустых файлов
+    result = generate_diff(
+        current_dir / 'fixtures' / 'empty_file.yml',
+        current_dir / 'fixtures' / 'filepath2.yaml'
+        )
+    assert result == 'nothing to diff'
+
 
 def test_one_file_zero():
     result = generate_diff(
@@ -48,6 +69,6 @@ def test_dict_transform():
 
 
 def test_sort_key():
-    e = ['true', '1234']
+    e = '- true'
     result = sort_key(e)
-    assert result == 'r'
+    assert result == 'true'

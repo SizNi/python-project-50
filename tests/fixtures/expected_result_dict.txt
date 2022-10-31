@@ -1,5 +1,5 @@
 {
-hello:o
-True:False
-numbers:12345
+  hello: o
+  numbers: 12345
+  True: False
 }
