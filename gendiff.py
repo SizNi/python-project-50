@@ -2,47 +2,9 @@ import json
 import os
 # from pathlib import Path
 import yaml
+import itertools
 
-
-def generate_diff(first_file, second_file):
-    first_size = zero_check(first_file)
-    second_size = zero_check(second_file)
-    if first_size == 0 or second_size == 0:
-        return 'nothing to diff'
-    # определение расширения файла и возврат списка ключей и path файлов ф1 ф2
-    keys_list, f1, f2 = define_file_extension(first_file, second_file)
-    # вызов функции, работающей со словарями
-    return generate_diff_second_step(keys_list, f1, f2)
-
-
-def generate_diff_second_step(keys_list, f1, f2):
-    summ_dict = {}
-    # print(keys_list)
-    # общий список всех ключей из двух файлов
-    for elem in keys_list:
-        if elem in f1 and elem in f2:  # случай 1. Ключ есть в обоих словарях:
-            if f1[elem] == f2[elem]:  # случай 1.1. значения ключей равны
-                # добавили в результирующий словарь ключ и значение
-                summ_dict[f'  {elem}'] = f1[elem]
-            # если значения не равны записываем из
-            # первого словая с - из второго с +
-            elif f1[elem] != f2[elem]:
-                summ_dict[f'- {elem}'] = f1[elem]
-                summ_dict[f'+ {elem}'] = f2[elem]
-        # если элемент есть в списке ф1 и его нет в списке ф2 и наоборот
-        elif elem in f1 and elem not in f2:
-            summ_dict[f'- {elem}'] = f1[elem]
-        elif elem in f2 and elem not in f1:
-            summ_dict[f'+ {elem}'] = f2[elem]
-    # приведение булевых объектов к строке и в нижний регистр
-    for elem in summ_dict:
-        if type(summ_dict[elem]) == bool:
-            summ_dict[elem] = str(summ_dict[elem]).lower()
-    result = dict_transform(summ_dict)
-    print(result)
-    return result
-
-# проверяет файлы на пустоту
+# проверка на пустоту файлов
 
 
 def zero_check(file):
@@ -50,26 +12,106 @@ def zero_check(file):
     result = res_1.st_size
     return result
 
-# сортирует и трансформирует словарь в нужный вид
+# Основная функция - сравнивает если нулевые значения,
+# если нет - работает с остальными функциями
 
 
-def dict_transform(summ_dict):
-    lines = []
-    lines.append('{')
-    keys_dict = []
-    keys_dict = summ_dict.keys()
-    keys_dict = sorted(keys_dict, key=sort_key)
-    for elem in keys_dict:
-        lines.append(f'  {elem}: {summ_dict[elem]}')
-    lines.append('}')
-    summ_str = '\n'.join(lines)
-    return (summ_str)
+def generate_diff(first_file, second_file):
+    first_size = zero_check(first_file)
+    second_size = zero_check(second_file)
+    if first_size == 0 or second_size == 0:
+        return 'nothing to diff'
+    else:
+        f1, f2 = define_file_extension(first_file, second_file)
+        lines = nest_dict(f1, f2)
+        result = stylish(lines)
+        print(result)
+        return result
 
-# функция сортировки по алфавиту без учета минусов и плюсов
+# сравнивает словари
 
 
-def sort_key(key):
-    return key[2:]
+def nest_dict(f1, f2):
+
+    def iter_(current_f1, current_f2):
+        keys_list1 = set(current_f1.keys())
+        keys_list2 = set(current_f2.keys())
+        keys_list = keys_list1 | keys_list2
+        keys_list = sorted(keys_list)
+        lines = {}
+        for elem in keys_list:
+            # если ключ есть в обоих словарях
+            if elem in keys_list1 and elem in keys_list2:
+                if type(current_f1[elem]) == bool:
+                    current_f1[elem] = str(current_f1[elem]).lower()
+                if current_f1[elem] is None:
+                    current_f1[elem] = 'null'
+                if type(current_f2[elem]) == bool:
+                    current_f2[elem] = str(current_f2[elem]).lower()
+                if current_f2[elem] is None:
+                    current_f2[elem] = 'null'
+                # все словари
+                if isinstance(
+                    current_f1[elem], dict
+                    ) and isinstance(
+                        current_f2[elem], dict
+                        ):
+                    lines[f'  {elem}'] = iter_(
+                        current_f1[elem], current_f2[elem]
+                        )
+                # один словарь
+                elif isinstance(current_f1[elem], dict) and not isinstance(
+                        current_f2[elem], dict
+                        ):
+                    lines[f'- {elem}'] = iter_(
+                        current_f1[elem], current_f1[elem]
+                        )
+                    lines[f'+ {elem}'] = current_f2[elem]
+                # один словарь
+                elif not isinstance(
+                    current_f1[elem], dict
+                    ) and isinstance(
+                        current_f2[elem], dict
+                        ):
+                    lines[f'- {elem}'] = current_f1[elem]
+                    lines[f'+ {elem}'] = iter_(
+                        current_f2[elem], current_f2[elem]
+                        )  # первый пустой
+                # все не словари
+                elif not isinstance(
+                    current_f1[elem], dict
+                    ) and not isinstance(
+                        current_f2[elem], dict
+                        ):
+                    if current_f1[elem] == current_f2[elem]:
+                        lines[f'  {elem}'] = current_f1[elem]
+                    if current_f1[elem] != current_f2[elem]:
+                        lines[f'- {elem}'] = current_f1[elem]
+                        lines[f'+ {elem}'] = current_f2[elem]
+            if elem in keys_list1 and elem not in keys_list2:
+                if type(current_f1[elem]) == bool:
+                    current_f1[elem] = str(current_f1[elem]).lower()
+                if current_f1[elem] is None:
+                    current_f1[elem] = 'null'
+                if isinstance(current_f1[elem], dict):
+                    lines[f'- {elem}'] = iter_(
+                        current_f1[elem], current_f1[elem]
+                        )
+                if not isinstance(current_f1[elem], dict):
+                    lines[f'- {elem}'] = current_f1[elem]
+            if elem not in keys_list1 and elem in keys_list2:
+                if type(current_f2[elem]) == bool:
+                    current_f2[elem] = str(current_f2[elem]).lower()
+                if current_f2[elem] is None:
+                    current_f2[elem] = 'null'
+                if isinstance(current_f2[elem], dict):
+                    lines[f'+ {elem}'] = iter_(
+                        current_f2[elem], current_f2[elem]
+                        )
+                if not isinstance(current_f2[elem], dict):
+                    lines[f'+ {elem}'] = current_f2[elem]
+        return lines
+    return iter_(f1, f2)
 
 # функция определения расширения файла и возврат аргументов
 
@@ -79,22 +121,43 @@ def define_file_extension(first_file, second_file):
     filename2, file_extension2 = os.path.splitext(second_file)
     if file_extension1 == '.json':
         f1 = json.load(open(first_file))
-        keys_list1 = set(f1.keys())
     elif file_extension1 == '.yaml' or file_extension1 == '.yml':
         f1 = yaml.safe_load(open(first_file))
-        keys_list1 = set(f1.keys())
     if file_extension2 == '.json':
         f2 = json.load(open(second_file))
-        keys_list2 = set(f2.keys())
     elif file_extension2 == '.yaml' or file_extension2 == '.yml':
         f2 = yaml.safe_load(open(second_file))
-        keys_list2 = set(f2.keys())
-    keys_list = keys_list1 | keys_list2
-    return keys_list, f1, f2
+    return f1, f2
+
+# форматирует словарь
+
+
+def stylish(value, replacer='    ', spaces_count=1):
+
+    def iter_(current_value, depth):
+        # если не словарь - возвращаем строчное значение value
+        if not isinstance(current_value, dict):
+            return str(current_value)
+        deep_indent_size = depth + spaces_count  # отсчет количества отступов
+        # умножаем количество отступов на значение отступа
+        deep_indent = replacer * deep_indent_size
+        # текущий отступ (в начале = 0, тк depth = 0)
+        current_indent = replacer * depth
+        lines = []
+        # для ключа и значения в value
+        for key, val in current_value.items():
+            lines.append(
+                f'{deep_indent[:-2]}{key}: {iter_(val, deep_indent_size)}'
+                )
+        # добавляет открывающие и закрывающие скобки
+        result = itertools.chain("{", lines, [current_indent + "}"])
+        return '\n'.join(result)
+    return iter_(value, 0)
+
 
 # current_dir = Path(__file__).parent
 # print(current_dir)
-# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1.json',
-# current_dir / 'tests' / 'fixtures' / 'file2.json')
+# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1_1.json',
+# current_dir / 'tests' / 'fixtures' / 'file2_2.json')
 # generate_diff(current_dir / 'tests' / 'fixtures' / 'filepath1.yml',
 # current_dir / 'tests' / 'fixtures' / 'filepath2.yaml')

@@ -1,5 +1,5 @@
 from pathlib import Path
-from gendiff import generate_diff, zero_check, dict_transform, sort_key
+from gendiff import generate_diff, zero_check
 
 current_dir = Path(__file__).parent
 
@@ -57,18 +57,12 @@ def test_zero_check():
     assert result != 0
 
 
-def test_dict_transform():
-    result = dict_transform(
-        {'numbers': '12345',
-         'True': 'False', 'hello': 'o'}
+def test_gendiff_nest():
+    result = generate_diff(
+        current_dir / 'fixtures' / 'file1_1.json',
+        current_dir / 'fixtures' / 'file2_2.json'
         )
-    file = current_dir / 'fixtures' / 'expected_result_dict.txt'
+    file = current_dir / 'fixtures' / 'expected_result_dict_2.txt'
     with file.open() as f:
         expected_result = f.read()
     assert result == expected_result
-
-
-def test_sort_key():
-    e = '- true'
-    result = sort_key(e)
-    assert result == 'true'
