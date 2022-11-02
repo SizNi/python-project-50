@@ -1,6 +1,6 @@
 import json
 import os
-# from pathlib import Path
+from pathlib import Path
 import yaml
 import itertools
 
@@ -23,7 +23,7 @@ def generate_diff(first_file, second_file):
         return 'nothing to diff'
     else:
         f1, f2 = define_file_extension(first_file, second_file)
-        lines = nest_dict(f1, f2)
+        lines = calculate_diff(f1, f2)
         result = stylish(lines)
         print(result)
         return result
@@ -31,7 +31,7 @@ def generate_diff(first_file, second_file):
 # сравнивает словари
 
 
-def nest_dict(f1, f2):
+def calculate_diff(f1, f2):
 
     def iter_(current_f1, current_f2):
         keys_list1 = set(current_f1.keys())
@@ -42,14 +42,6 @@ def nest_dict(f1, f2):
         for elem in keys_list:
             # если ключ есть в обоих словарях
             if elem in keys_list1 and elem in keys_list2:
-                if type(current_f1[elem]) == bool:
-                    current_f1[elem] = str(current_f1[elem]).lower()
-                if current_f1[elem] is None:
-                    current_f1[elem] = 'null'
-                if type(current_f2[elem]) == bool:
-                    current_f2[elem] = str(current_f2[elem]).lower()
-                if current_f2[elem] is None:
-                    current_f2[elem] = 'null'
                 # все словари
                 if isinstance(
                     current_f1[elem], dict
@@ -89,10 +81,6 @@ def nest_dict(f1, f2):
                         lines[f'- {elem}'] = current_f1[elem]
                         lines[f'+ {elem}'] = current_f2[elem]
             if elem in keys_list1 and elem not in keys_list2:
-                if type(current_f1[elem]) == bool:
-                    current_f1[elem] = str(current_f1[elem]).lower()
-                if current_f1[elem] is None:
-                    current_f1[elem] = 'null'
                 if isinstance(current_f1[elem], dict):
                     lines[f'- {elem}'] = iter_(
                         current_f1[elem], current_f1[elem]
@@ -100,10 +88,6 @@ def nest_dict(f1, f2):
                 if not isinstance(current_f1[elem], dict):
                     lines[f'- {elem}'] = current_f1[elem]
             if elem not in keys_list1 and elem in keys_list2:
-                if type(current_f2[elem]) == bool:
-                    current_f2[elem] = str(current_f2[elem]).lower()
-                if current_f2[elem] is None:
-                    current_f2[elem] = 'null'
                 if isinstance(current_f2[elem], dict):
                     lines[f'+ {elem}'] = iter_(
                         current_f2[elem], current_f2[elem]
@@ -136,6 +120,10 @@ def stylish(value, replacer='    ', spaces_count=1):
 
     def iter_(current_value, depth):
         # если не словарь - возвращаем строчное значение value
+        if isinstance(current_value, bool):
+            return str(current_value).lower()
+        if current_value is None:
+            return 'null'
         if not isinstance(current_value, dict):
             return str(current_value)
         deep_indent_size = depth + spaces_count  # отсчет количества отступов
@@ -152,10 +140,11 @@ def stylish(value, replacer='    ', spaces_count=1):
         # добавляет открывающие и закрывающие скобки
         result = itertools.chain("{", lines, [current_indent + "}"])
         return '\n'.join(result)
+
     return iter_(value, 0)
 
 
-# current_dir = Path(__file__).parent
+current_dir = Path(__file__).parent
 # print(current_dir)
 # generate_diff(current_dir / 'tests' / 'fixtures' / 'file1_1.json',
 # current_dir / 'tests' / 'fixtures' / 'file2_2.json')
