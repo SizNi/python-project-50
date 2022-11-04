@@ -1,5 +1,6 @@
 import itertools
 
+
 def stylish(value, replacer='    ', spaces_count=1):
     # print(value)
     def iter_(current_value, depth):

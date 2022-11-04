@@ -9,7 +9,7 @@ from gendiff_plain import plain
 # если нет - работает с остальными функциями
 
 
-def generate_diff(first_file, second_file, format = 'stylish'):
+def generate_diff(first_file, second_file, format='stylish'):
     first_size = zero_check(first_file)
     second_size = zero_check(second_file)
     if first_size == 0 or second_size == 0:
@@ -116,9 +116,3 @@ def zero_check(file):
     res_1 = os.stat(file)
     result = res_1.st_size
     return result
-
-# current_dir = Path(__file__).parent
-# print(current_dir)
-# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1_1.json', current_dir / 'tests' / 'fixtures' / 'file2_2.json')
-# generate_diff(current_dir / 'tests' / 'fixtures' / 'filepath1.yml',
-# current_dir / 'tests' / 'fixtures' / 'filepath2.yaml')
