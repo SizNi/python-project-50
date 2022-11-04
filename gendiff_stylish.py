@@ -2,7 +2,6 @@ import itertools
 
 
 def stylish(value, replacer='    ', spaces_count=1):
-    # print(value)
     def iter_(current_value, depth):
         # если не словарь - возвращаем строчное значение value
         if isinstance(current_value, bool):

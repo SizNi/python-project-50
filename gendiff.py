@@ -4,6 +4,7 @@ import os
 import yaml
 from gendiff_stylish import stylish
 from gendiff_plain import plain
+from gendiff_json import true_json
 
 # Основная функция - сравнивает если нулевые значения,
 # если нет - работает с остальными функциями
@@ -21,7 +22,8 @@ def generate_diff(first_file, second_file, format='stylish'):
             result = stylish(lines)
         elif format.lower() == 'plain':
             result = plain(lines)
-        # print(result)
+        elif format.lower() == 'json':
+            result = true_json(lines)
         return result
 
 # сравнивает словари
