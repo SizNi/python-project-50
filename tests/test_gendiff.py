@@ -66,3 +66,15 @@ def test_gendiff_nest():
     with file.open() as f:
         expected_result = f.read()
     assert result == expected_result
+
+
+def test_gendiff_plain():  # верный результат plain
+    result = generate_diff(
+        current_dir / 'fixtures' / 'file1_1.json',
+        current_dir / 'fixtures' / 'file2_2.json',
+        'plain'
+        )
+    file = current_dir / 'fixtures' / 'expected_result_plain.txt'
+    with file.open() as f:
+        expected_result = f.read()
+    assert result == expected_result
