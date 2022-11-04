@@ -1,22 +1,15 @@
 import json
 import os
-from pathlib import Path
+# from pathlib import Path
 import yaml
-import itertools
-
-# проверка на пустоту файлов
-
-
-def zero_check(file):
-    res_1 = os.stat(file)
-    result = res_1.st_size
-    return result
+from gendiff_stylish import stylish
+from gendiff_plain import plain
 
 # Основная функция - сравнивает если нулевые значения,
 # если нет - работает с остальными функциями
 
 
-def generate_diff(first_file, second_file):
+def generate_diff(first_file, second_file, format = 'stylish'):
     first_size = zero_check(first_file)
     second_size = zero_check(second_file)
     if first_size == 0 or second_size == 0:
@@ -24,8 +17,11 @@ def generate_diff(first_file, second_file):
     else:
         f1, f2 = define_file_extension(first_file, second_file)
         lines = calculate_diff(f1, f2)
-        result = stylish(lines)
-        print(result)
+        if format.lower() == 'stylish':
+            result = stylish(lines)
+        elif format.lower() == 'plain':
+            result = plain(lines)
+        # print(result)
         return result
 
 # сравнивает словари
@@ -113,40 +109,16 @@ def define_file_extension(first_file, second_file):
         f2 = yaml.safe_load(open(second_file))
     return f1, f2
 
-# форматирует словарь
+# проверка на пустоту файлов
 
 
-def stylish(value, replacer='    ', spaces_count=1):
+def zero_check(file):
+    res_1 = os.stat(file)
+    result = res_1.st_size
+    return result
 
-    def iter_(current_value, depth):
-        # если не словарь - возвращаем строчное значение value
-        if isinstance(current_value, bool):
-            return str(current_value).lower()
-        if current_value is None:
-            return 'null'
-        if not isinstance(current_value, dict):
-            return str(current_value)
-        deep_indent_size = depth + spaces_count  # отсчет количества отступов
-        # умножаем количество отступов на значение отступа
-        deep_indent = replacer * deep_indent_size
-        # текущий отступ (в начале = 0, тк depth = 0)
-        current_indent = replacer * depth
-        lines = []
-        # для ключа и значения в value
-        for key, val in current_value.items():
-            lines.append(
-                f'{deep_indent[:-2]}{key}: {iter_(val, deep_indent_size)}'
-                )
-        # добавляет открывающие и закрывающие скобки
-        result = itertools.chain("{", lines, [current_indent + "}"])
-        return '\n'.join(result)
-
-    return iter_(value, 0)
-
-
-current_dir = Path(__file__).parent
+# current_dir = Path(__file__).parent
 # print(current_dir)
-# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1_1.json',
-# current_dir / 'tests' / 'fixtures' / 'file2_2.json')
+# generate_diff(current_dir / 'tests' / 'fixtures' / 'file1_1.json', current_dir / 'tests' / 'fixtures' / 'file2_2.json')
 # generate_diff(current_dir / 'tests' / 'fixtures' / 'filepath1.yml',
 # current_dir / 'tests' / 'fixtures' / 'filepath2.yaml')
