@@ -20,7 +20,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-        - name: Install dependencies
+      - name: Install dependencies
         run: |
           pip install poetry
           poetry install
