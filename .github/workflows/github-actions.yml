@@ -23,8 +23,8 @@ jobs:
       - name: Send test coverage
         uses: paambaati/codeclimate-action@v3.2.0
         env:
-          CC_TEST_REPORTER_ID: 1aa423ce88ec53b836ba7ce469e56720a2e148cc4d7d66607664cddb9b3ae6d3
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageCommand: make coverage
+          coverageCommand: make test-coverage
           debug: true
       - run: echo "🍏 This job's status is ${{ job.status }}."

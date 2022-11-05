@@ -7,5 +7,5 @@ pytest:
 lint: # запуск flake8 на проект python-project-50
 	poetry run flake8
 
-coverage:
-	poetry run pytest --cov
+test-coverage:
+	poetry run pytest --cov=$(CURDIR) --cov-report xml
