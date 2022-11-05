@@ -20,4 +20,9 @@ jobs:
         run: make lint
       - name: Run tests
         run: make pytest
+      - uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: 1aa423ce88ec53b836ba7ce469e56720a2e148cc4d7d66607664cddb9b3ae6d3
+      with:
+        coverageCommand: poetry run pytest --cov
       - run: echo "🍏 This job's status is ${{ job.status }}."
