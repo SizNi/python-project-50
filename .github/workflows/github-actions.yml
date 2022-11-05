@@ -16,6 +16,10 @@ jobs:
         run: |
           pip install poetry
           poetry install
+  tests:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Linter
         run: make lint
       - name: Run tests
