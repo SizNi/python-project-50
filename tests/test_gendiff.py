@@ -1,5 +1,5 @@
 from pathlib import Path
-from gendiff import generate_diff, zero_check
+from gendiff.gendiff_work import generate_diff, zero_check
 
 current_dir = Path(__file__).parent
 

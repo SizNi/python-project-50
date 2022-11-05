@@ -4,7 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Nik Sizov <wwwwwwwww@list.ru>"]
 readme = "README.md"
-packages = [{include = "hexlet_code"}]
+packages = [
+  { include = "gendiff" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -12,7 +14,7 @@ pyyaml = "^6.0"
 pytest-cov = "^4.0.0"
 
 [tool.poetry.scripts]
-gendiff = "hexlet_code:main"
+gendiff = "gendiff.app:main"
 
 
 [tool.poetry.group.dev.dependencies]

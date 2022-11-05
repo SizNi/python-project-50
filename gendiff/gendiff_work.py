@@ -1,10 +1,9 @@
 import json
 import os
-# from pathlib import Path
 import yaml
-from gendiff_stylish import stylish
-from gendiff_plain import plain
-from gendiff_json import true_json
+from gendiff.gendiff_stylish import stylish
+from gendiff.gendiff_plain import plain
+from gendiff.gendiff_json import true_json
 
 # Основная функция - сравнивает если нулевые значения,
 # если нет - работает с остальными функциями
