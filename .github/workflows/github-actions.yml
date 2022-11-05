@@ -20,9 +20,12 @@ jobs:
         run: make lint
       - name: Run tests
         run: make pytest
-      - uses: paambaati/codeclimate-action@v2.2.4
-      env:
-        CC_TEST_REPORTER_ID: 1aa423ce88ec53b836ba7ce469e56720a2e148cc4d7d66607664cddb9b3ae6d3
-      with:
-        coverageCommand: poetry run pytest --cov
+      - name: Send report to CodeClimate
+        run: |
+        export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter format-coverage -t coverage.py coverage.xml
+        ./cc-test-reporter upload-coverage -r "${{ 1aa423ce88ec53b836ba7ce469e56720a2e148cc4d7d66607664cddb9b3ae6d3 }}"
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
