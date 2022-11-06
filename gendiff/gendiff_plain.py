@@ -64,6 +64,8 @@ def path_check(value):
         return str(value).lower()
     elif value is None:
         return 'null'
+    elif isinstance(value, int):
+        return value
     else:
         return str(f"'{value}'")
 
