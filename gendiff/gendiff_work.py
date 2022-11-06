@@ -42,36 +42,36 @@ def calculate_diff(f1, f2):
                 # все словари
                 if isinstance(
                     current_f1[elem], dict
-                    ) and isinstance(
+                ) and isinstance(
                         current_f2[elem], dict
-                        ):
+                ):
                     lines[f'  {elem}'] = iter_(
                         current_f1[elem], current_f2[elem]
-                        )
+                    )
                 # один словарь
                 elif isinstance(current_f1[elem], dict) and not isinstance(
                         current_f2[elem], dict
-                        ):
+                ):
                     lines[f'- {elem}'] = iter_(
                         current_f1[elem], current_f1[elem]
-                        )
+                    )
                     lines[f'+ {elem}'] = current_f2[elem]
                 # один словарь
                 elif not isinstance(
                     current_f1[elem], dict
-                    ) and isinstance(
+                ) and isinstance(
                         current_f2[elem], dict
-                        ):
+                ):
                     lines[f'- {elem}'] = current_f1[elem]
                     lines[f'+ {elem}'] = iter_(
                         current_f2[elem], current_f2[elem]
-                        )  # первый пустой
+                    )  # первый пустой
                 # все не словари
                 elif not isinstance(
                     current_f1[elem], dict
-                    ) and not isinstance(
+                ) and not isinstance(
                         current_f2[elem], dict
-                        ):
+                ):
                     if current_f1[elem] == current_f2[elem]:
                         lines[f'  {elem}'] = current_f1[elem]
                     if current_f1[elem] != current_f2[elem]:
@@ -81,14 +81,14 @@ def calculate_diff(f1, f2):
                 if isinstance(current_f1[elem], dict):
                     lines[f'- {elem}'] = iter_(
                         current_f1[elem], current_f1[elem]
-                        )
+                    )
                 if not isinstance(current_f1[elem], dict):
                     lines[f'- {elem}'] = current_f1[elem]
             if elem not in keys_list1 and elem in keys_list2:
                 if isinstance(current_f2[elem], dict):
                     lines[f'+ {elem}'] = iter_(
                         current_f2[elem], current_f2[elem]
-                        )
+                    )
                 if not isinstance(current_f2[elem], dict):
                     lines[f'+ {elem}'] = current_f2[elem]
         return lines

@@ -20,7 +20,7 @@ def stylish(value, replacer='    ', spaces_count=1):
         for key, val in current_value.items():
             lines.append(
                 f'{deep_indent[:-2]}{key}: {iter_(val, deep_indent_size)}'
-                )
+            )
         # добавляет открывающие и закрывающие скобки
         result = itertools.chain("{", lines, [current_indent + "}"])
         return '\n'.join(result)
