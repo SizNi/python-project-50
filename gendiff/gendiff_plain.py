@@ -34,13 +34,11 @@ def gendiff_plain(value):
             if path[0] != next_path[0]:
                 summ_list.append(f"Property '{path[0]}' was removed")
                 i += 1
-                print(path[1])
             elif path[0] == next_path[0]:  # если пути в кортежах равны
                 summ_list.append(
                     f"Property '{path[0]}' was updated. "
                     f"From {path_check(path[1])} to {path_check(next_path[1])}"
                 )
-                print(path[1])
                 i += 2
         elif path[2] == '+':  # если в кортеже +
             if path[0] != previous_path[0]:  # если пути в кортежах не равны
@@ -48,7 +46,6 @@ def gendiff_plain(value):
                     f"Property '{path[0]}' was "
                     f"added with value: {path_check(path[1])}"
                 )
-                print(path[1])
                 i += 1
         elif path[2] == ' ':
             i += 1
